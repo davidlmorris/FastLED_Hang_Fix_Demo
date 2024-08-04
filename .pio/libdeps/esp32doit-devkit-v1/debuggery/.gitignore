@@ -31,10 +31,6 @@
 *.out
 *.app
 
-#config
-/.vscode
-
-
 # Build outputs
 .build/
 build/
@@ -48,5 +44,26 @@ out/
 components/
 /docs
 
+#Commands
+/.cmd
+
+#config
+/.vscode
+/.vscode_nano
+/.vscode_ProMicro
+/.vscode_ESP32_DEV
+/.vscode_doitESP32devkitV1
+
+#assets
+/assets/class_debuggery__.png
+
+#temporary
+#library.json
+
 #private
 private_notes.txt
+
+#examples
+/examples/avoid_overhead
+/examples/current
+

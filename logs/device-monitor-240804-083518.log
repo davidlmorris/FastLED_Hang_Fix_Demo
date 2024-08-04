@@ -1,0 +1,24 @@
+08:35:18.651 > ets Jun  8 2016 00:22:57
+08:35:18.651 > 
+08:35:18.651 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+08:35:18.652 > configsip: 0, SPIWP:0xee
+08:35:18.652 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+08:35:18.652 > mode:DIO, clock div:2
+08:35:18.652 > load:0x3fff0030,len:1184
+08:35:18.652 > load:0x40078000,len:13232
+08:35:18.672 > load:0x40080400,len:3028
+08:35:18.672 > entry 0x400805e4
+08:35:21.900 > 
+08:35:22.900 > 
+08:35:23.902 > code-lights : 'src/FastLED_Hang_Fix_Demo.cpp Built: Aug  4 2024 08:35:02'
+08:35:23.908 > BOARD_NAME selected is Esp32 doitESP32devkitV1.
+08:35:23.908 > Starting comms 5.10 seconds after boot.
+08:35:23.955 > Main App running on core 1 at 240 MHz.
+08:35:24.119 > controllers[0]->size() = 256.
+08:35:24.119 > controllers[1]->size() = 256.
+08:35:24.119 > controllers[2]->size() = 470.
+08:35:24.125 > controllers[3]->size() = 470.
+08:35:24.125 > FastLED.count() = 4.
+08:35:24.170 > fastLedShowHandlerTask running on core 1.
+08:35:24.273 > FastLED Lowest frame rate in use is 70 (14 ms per frame).
+08:35:24.422 > Initialisation Complete 5.63 seconds after boot.

@@ -1,0 +1,95 @@
+22:30:14.441 > ets Jun  8 2016 00:22:57
+22:30:14.441 > 
+22:30:14.441 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+22:30:14.446 > configsip: 0, SPIWP:0xee
+22:30:14.446 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+22:30:14.452 > mode:DIO, clock div:2
+22:30:14.458 > load:0x3fff0030,len:1184
+22:30:14.458 > load:0x40078000,len:13232
+22:30:14.463 > load:0x40080400,len:3028
+22:30:14.463 > entry 0x400805e4
+22:30:17.689 > 
+22:30:18.689 > 
+22:30:19.694 > code-lights : 'src/FastLED_Hang_Fix_Demo.cpp Built: Aug  3 2024 22:29:54'
+22:30:19.700 > BOARD_NAME selected is Esp32 doitESP32devkitV1.
+22:30:19.700 > Starting comms 5.10 seconds after boot.
+22:30:19.755 > Main App running on core 1 at 240 MHz.
+22:30:19.909 > controllers[0]->size() = 256.
+22:30:19.909 > controllers[1]->size() = 256.
+22:30:19.909 > controllers[2]->size() = 470.
+22:30:19.914 > controllers[3]->size() = 470.
+22:30:19.914 > FastLED.count() = 4.
+22:30:19.959 > fastLedShowHandlerTask running on core 1.
+22:30:20.062 > FastLED Lowest frame rate in use is 70 (14 ms per frame).
+22:30:20.211 > Initialisation Complete 5.63 seconds after boot.
+22:39:30.793 > 
+22:39:30.794 > FastLED.Show() has jammed after 9.27 minutes since boot!
+22:39:30.857 > Forcing semaphore reset try.
+22:39:30.930 > 
+22:45:14.631 > Running continuously for 15.00 minutes(s) after boot.
+23:00:14.487 > Running continuously for 30.00 minutes(s) after boot.
+23:15:14.498 > Running continuously for 45.00 minutes(s) after boot.
+23:18:33.731 > 
+23:18:33.732 > FastLED.Show() has jammed after 48.32 minutes since boot!
+23:18:33.808 > Forcing semaphore reset try.
+23:18:33.872 > 
+23:30:14.372 > Running continuously for 1.00 hour(s) after boot.
+23:42:29.876 > 
+23:42:29.877 > FastLED.Show() has jammed after 72.26 minutes since boot!
+23:42:29.955 > Forcing semaphore reset try.
+23:42:30.017 > 
+23:45:14.270 > Running continuously for 75.00 minutes(s) after boot.
+23:50:03.661 > 
+23:50:03.662 > FastLED.Show() has jammed after 79.82 minutes since boot!
+23:50:03.739 > Forcing semaphore reset try.
+23:50:03.801 > 
+00:00:14.250 > Running continuously for 90.00 minutes(s) after boot.
+00:14:00.040 > 
+00:14:00.040 > FastLED.Show() has jammed after 103.77 minutes since boot!
+00:14:00.119 > Forcing semaphore reset try.
+00:14:00.183 > 
+00:15:14.116 > Running continuously for 105.00 minutes(s) after boot.
+00:21:33.798 > 
+00:21:33.799 > FastLED.Show() has jammed after 111.33 minutes since boot!
+00:21:33.875 > Forcing semaphore reset try.
+00:21:33.939 > 
+00:30:14.140 > Running continuously for 2.00 hour(s) after boot.
+00:45:13.972 > Running continuously for 135.00 minutes(s) after boot.
+01:00:13.944 > Running continuously for 150.00 minutes(s) after boot.
+01:15:13.894 > Running continuously for 165.00 minutes(s) after boot.
+01:30:13.850 > Running continuously for 3.00 hour(s) after boot.
+01:45:13.712 > Running continuously for 195.00 minutes(s) after boot.
+01:48:28.158 > 
+01:48:28.158 > FastLED.Show() has jammed after 198.24 minutes since boot!
+01:48:28.236 > Forcing semaphore reset try.
+01:48:28.299 > 
+01:56:01.753 > 
+01:56:01.754 > FastLED.Show() has jammed after 205.80 minutes since boot!
+01:56:01.831 > Forcing semaphore reset try.
+01:56:01.894 > 
+02:00:13.670 > Running continuously for 210.00 minutes(s) after boot.
+02:15:13.621 > Running continuously for 225.00 minutes(s) after boot.
+02:30:13.592 > Running continuously for 4.00 hour(s) after boot.
+02:45:13.472 > Running continuously for 255.00 minutes(s) after boot.
+03:00:13.458 > Running continuously for 270.00 minutes(s) after boot.
+03:15:13.329 > Running continuously for 285.00 minutes(s) after boot.
+03:30:13.326 > Running continuously for 5.00 hour(s) after boot.
+03:45:13.151 > Running continuously for 315.00 minutes(s) after boot.
+04:00:13.160 > Running continuously for 330.00 minutes(s) after boot.
+04:15:13.028 > Running continuously for 345.00 minutes(s) after boot.
+04:30:13.031 > Running continuously for 6.00 hour(s) after boot.
+04:45:12.952 > Running continuously for 375.00 minutes(s) after boot.
+05:00:12.834 > Running continuously for 390.00 minutes(s) after boot.
+05:15:12.787 > Running continuously for 405.00 minutes(s) after boot.
+05:30:12.733 > Running continuously for 7.00 hour(s) after boot.
+05:45:12.623 > Running continuously for 435.00 minutes(s) after boot.
+06:00:12.601 > Running continuously for 450.00 minutes(s) after boot.
+06:15:12.545 > Running continuously for 465.00 minutes(s) after boot.
+06:30:12.454 > Running continuously for 8.00 hour(s) after boot.
+06:45:12.335 > Running continuously for 495.00 minutes(s) after boot.
+07:00:12.257 > Running continuously for 510.00 minutes(s) after boot.
+07:15:12.191 > Running continuously for 525.00 minutes(s) after boot.
+07:30:12.115 > Running continuously for 9.00 hour(s) after boot.
+07:45:12.060 > Running continuously for 555.00 minutes(s) after boot.
+08:00:12.049 > Running continuously for 570.00 minutes(s) after boot.
+08:15:11.957 > Running continuously for 585.00 minutes(s) after boot.
