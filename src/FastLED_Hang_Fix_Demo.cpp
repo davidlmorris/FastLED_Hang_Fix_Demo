@@ -8,18 +8,18 @@
 /// NO NEED TO HOOK THIS UP
 /// Just run it on an isolated Esp32.
 
+#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.0"
+
 #ifndef ESP32
 # error "This code requires an ESP32"
 #endif
 
-// this bit from https://github.com/SensorsIot/ESP32-Interrupts-deepsleep/blob/master/Frequency_Counter_with_Timer_Interrupt/Frequency_Counter_with_Timer_Interrupt.ino
+// this bit borrowed from https://github.com/SensorsIot/ESP32-Interrupts-deepsleep/blob/master/Frequency_Counter_with_Timer_Interrupt/Frequency_Counter_with_Timer_Interrupt.ino
 // because I need some interrupts to do something...
 
-volatile int count = 0;
-volatile int frequency;
-
-int tst;
-
+volatile unsigned long count = 0;
+volatile unsigned long frequency;
+volatile bool outVal = true;
 hw_timer_t* timer = NULL;
 
 
@@ -28,10 +28,15 @@ portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 void IRAM_ATTR onTimer()
     {
     portENTER_CRITICAL_ISR(&timerMux);
+    // Add this next line for more pathology!
+    // digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);
+
+    outVal = !outVal;
     frequency = count;
     count++;
     portEXIT_CRITICAL_ISR(&timerMux);
     }
+
 
 void setup(void)
     {
@@ -48,7 +53,7 @@ void setup(void)
         DEBUG_DELAY(xTickFullSec);
         DEBUG_PRINTLN("");
         DEBUG_DELAY(xTickFullSec);
-        DEBUG_PROGANNOUNCE("FastLED_Hang_Fix_Demo", "'" __FILE__ "'"  " Built: " __DATE__ " " __TIME__ ".");
+        DEBUG_PROGANNOUNCE("FastLED_Hang_Fix_Demo " VERSION_FASTLED_HANG_FIX_DEMO, "'" __FILE__ "'"  " Built: " __DATE__ " " __TIME__ ".");
         DEBUG_PRINT("Starting comms ");
         DEBUG_PRINT(esp_timer_get_time() / 1000000.0);
         DEBUG_PRINT(" seconds after boot");
@@ -93,15 +98,16 @@ void setup(void)
         DEBUG_SEMAPHORE_RELEASE;
         }
 
-    fastLedPostInit();
 
-
-// Some interrupt stuff to run in the background
+// Some pathological interrupt stuff to run in the background
+    pinMode(DIO_TM1637_DIGIT_DISPLAY, OUTPUT);
     timer = timerBegin(0, 80, true);
     timerAttachInterrupt(timer, &onTimer, true);
     timerAlarmWrite(timer, 5, true);
     timerAlarmEnable(timer);
+// end of pathological interrupt stuff.
 
+    fastLedPostInit();
     clear_all_leds();
     vTaskDelay(pdMS_TO_TICKS(1));
     FastLEDshow();
@@ -119,46 +125,70 @@ void setup(void)
     }
 
 
-
+#define MINUTES_BETWEEN_REPORTS 15
+#define NUMBER_BUFFER 33
 
 void loop(void)
     {
-#if DEBUG_ON        
-    static uint8_t HourCount = 0;
+#if DEBUG_ON    
+    static bool bReport = true;
+    static unsigned long loopTime = 0;
+#endif    
 
-    EVERY_N_MINUTES(15)
+    paint_random_leds(); // Add some random data to the LEDs
+    vTaskDelay(pdMS_TO_TICKS(1));
+    FastLEDshow(); // Now show the LEDs
+#if DEBUG_ON    
+    loopTime++;
+    if (bReport)
         {
-        HourCount++;
         DEBUG_START_SEMAPHORE_BLOCK
             {
+            char buffer[NUMBER_BUFFER + 1];
+            uint32_t seconds_run_time = (esp_timer_get_time() / 1000000.0);
+            uint32_t tm_Hours = (seconds_run_time / 3600);
+            uint32_t tm_Minutes = (seconds_run_time / 60) % 60;
+            uint32_t tm_Seconds = seconds_run_time % 60;
             DEBUG_PRINT("Running continuously for ");
-            if (HourCount >= 4)
+            if (tm_Hours > 0)
                 {
-                HourCount = 0;
-                DEBUG_PRINT((esp_timer_get_time() / 1000000.0) / 3600.0);
-                DEBUG_PRINT(" hour(s) after boot");
+                snprintf(buffer, NUMBER_BUFFER, "%u:", tm_Hours);
+                DEBUG_PRINT(buffer);
+                }
+            snprintf(buffer, NUMBER_BUFFER, "%02.2u:", tm_Minutes);
+            DEBUG_PRINT(buffer);
+            snprintf(buffer, NUMBER_BUFFER, "%02.2u", tm_Seconds);
+            DEBUG_PRINT(buffer);
+            if (tm_Hours > 0)
+                {
+                DEBUG_PRINT(" hour(s) ");
                 }
             else
                 {
-                DEBUG_PRINT((esp_timer_get_time() / 1000000.0) / 60.0);
-                DEBUG_PRINT(" minutes(s) after boot");
+                if (tm_Minutes > 0)
+                    {
+                    DEBUG_PRINT(" minutes(s) ");
+                    }
+                else
+                    {
+                    DEBUG_PRINT(" seconds(s) ");
+                    }
                 }
-            DEBUG_PRINTLN(".");
+            DEBUG_PRINT("after boot at an average of ");
+            DEBUG_PRINT((float) (loopTime / (MINUTES_BETWEEN_REPORTS * 60.0)),2);
+            DEBUG_PRINT(" loops per second (interrupts = ");
+            DEBUG_PRINT(frequency);
+            DEBUG_PRINTLN(").");
+            loopTime = 0;
+            frequency = 0;
             DEBUG_DELAY(xTickATinyBit);
             DEBUG_SEMAPHORE_RELEASE;
             }
+        bReport = false;
         }
-#endif
-    paint_random_leds();
-    vTaskDelay(pdMS_TO_TICKS(1));
-  // Now show the LEDs
-    FastLEDshow();
-
-#if DEBUG_ON && DEBUG_UPDATE_FREQUENCY
-    DEBUG_START_SEMAPHORE_BLOCK
+    EVERY_N_MINUTES(MINUTES_BETWEEN_REPORTS)
         {
-        DEBUG_SPEEDTEST(60);
-        DEBUG_SEMAPHORE_RELEASE;
+        bReport = true;
         }
 #endif
     taskYIELD();

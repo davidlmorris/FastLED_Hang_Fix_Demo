@@ -8,7 +8,7 @@ FastLED is reported (notably [here](https://github.com/FastLED/FastLED/issues/14
 
 ## Why
 
-The FastLed RMT driver makes extensive use of interrupts.  The comments in the FastLED driver hint at least one per 32 bits of data out.  The driver does all the sending in one hit so that even with multiple controllers (as we have in this demo) it is only when the last one is called does it finally does the work.  I am uncertain what might happen if only one controller that is not the last one is called.  (Something for a future experiment?). On a send, it waits 50 microseconds to signal a start, then starts the channels for each controller.  It then sets a semaphore which is then released when the final channel on the final controller is complete.  It appears that rarely something goes wrong here, and presumably, that interrupt is swallowed by the Esp32 system.   The result is that ESP32RMTController::showPixels() waits forever for the semaphore to be released (which it never will be) so we have a hang.  Note that this hang will occur minutes or hours into a run, depending on other factors (like load or power), and is essentially out of the control of the FastLED driver.  
+The FastLed RMT driver makes extensive use of interrupts.  The comments in the FastLED driver hint at least one per 32 bits of data out.  The driver does all the sending in one hit so that even with multiple controllers (as we have in this demo) it is only when the last one is called does it finally does the work.  I am uncertain what might happen if only one controller that is not the last one is called.  (Something for a future experiment?). On a send, it waits 50 microseconds to signal a start, then starts the channels for each controller.  It then sets a semaphore which is then released when the final channel on the final controller is complete.  It appears that rarely something goes wrong here, and presumably, that interrupt is swallowed by the Esp32 system.   The result is that ESP32RMTController::showPixels() waits forever for the semaphore to be released (which it never will be) so we have a hang.  Note that this hang will occur minutes or hours or even days into a run, depending on other factors (like load or power), and is essentially out of the control of the FastLED driver.  
 
 ## The Fix
 
@@ -270,4 +270,89 @@ I trust you are able to replicate these results in some fashion or other.
 07:15:12.191 > Running continuously for 525.00 minutes(s) after boot.
 07:30:12.115 > Running continuously for 9.00 hour(s) after boot.
 07:45:12.060 > Running continuously for 555.00 minutes(s) after boot.
+```
+
+The following run was for more than 13 hours overnight, and yet had zero hangs, so presumably there are times when this can go for a long time without causing a hangs.  (Longest I've noticed was 17 hours... but I am sure you can do better!)
+
+(Note the small display changes, though the code is still running exactly the same pathological timer interrupts.)
+```text
+17:27:20.765 > ets Jun  8 2016 00:22:57
+17:27:20.765 >
+17:27:20.765 > rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+17:27:20.771 > configsip: 0, SPIWP:0xee
+17:27:20.771 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+17:27:20.776 > mode:DIO, clock div:2
+17:27:20.781 > load:0x3fff0030,len:1184
+17:27:20.781 > load:0x40078000,len:13232
+17:27:20.786 > load:0x40080400,len:3028 
+17:27:20.786 > entry 0x400805e4
+17:27:24.014 > 
+17:27:25.015 > 
+17:27:26.019 > FastLED_Hang_Fix_Demo 'src/FastLED_Hang_Fix_Demo.cpp' Built: Aug  4 2024 17:27:04.
+17:27:26.040 > BOARD_NAME selected is Esp32 doitESP32devkitV1.
+17:27:26.040 > Starting comms 5.10 seconds after boot.
+17:27:26.082 > Main App running on core 1 at 240 MHz.
+17:27:26.235 > FastLED controllers[0]->size() = 256.
+17:27:26.235 > FastLED controllers[1]->size() = 256.
+17:27:26.241 > FastLED controllers[2]->size() = 470.
+17:27:26.241 > FastLED controllers[3]->size() = 470.
+17:27:26.246 > FastLED.count() = 4.
+17:27:26.297 > fastLedShowHandlerTask running on core 1.
+17:27:26.400 > FastLED Lowest frame rate in use is 70 (14 ms per frame).
+17:27:26.556 > Initialisation Complete 5.64 seconds after boot.
+17:27:26.699 > Running continuously for 00:05 seconds(s) after boot at an average of 0.00 loops per second.
+17:42:20.881 > Running continuously for 15:00 minutes(s) after boot at an average of 21.62 loops per second.
+17:57:20.851 > Running continuously for 30:00 minutes(s) after boot at an average of 21.77 loops per second.
+18:12:20.770 > Running continuously for 45:00 minutes(s) after boot at an average of 21.78 loops per second.
+18:27:20.719 > Running continuously for  1:00:00 hour(s) after boot at an average of 21.75 loops per second.
+18:42:20.643 > Running continuously for  1:15:00 hour(s) after boot at an average of 21.77 loops per second.
+18:57:20.536 > Running continuously for  1:30:00 hour(s) after boot at an average of 21.76 loops per second.
+19:12:20.508 > Running continuously for  1:45:00 hour(s) after boot at an average of 21.81 loops per second.
+19:27:20.428 > Running continuously for  2:00:00 hour(s) after boot at an average of 21.78 loops per second.
+19:42:20.386 > Running continuously for  2:15:00 hour(s) after boot at an average of 21.73 loops per second.
+19:57:20.305 > Running continuously for  2:30:00 hour(s) after boot at an average of 21.76 loops per second.
+20:12:20.206 > Running continuously for  2:45:00 hour(s) after boot at an average of 21.81 loops per second.
+20:27:20.183 > Running continuously for  3:00:00 hour(s) after boot at an average of 21.75 loops per second.
+20:42:20.112 > Running continuously for  3:15:00 hour(s) after boot at an average of 21.75 loops per second.
+20:57:20.033 > Running continuously for  3:30:00 hour(s) after boot at an average of 21.78 loops per second.
+21:12:19.932 > Running continuously for  3:45:00 hour(s) after boot at an average of 21.78 loops per second.
+21:27:19.873 > Running continuously for  4:00:00 hour(s) after boot at an average of 21.75 loops per second.
+21:42:19.814 > Running continuously for  4:15:00 hour(s) after boot at an average of 21.79 loops per second.
+21:57:19.724 > Running continuously for  4:30:00 hour(s) after boot at an average of 21.76 loops per second.
+22:12:19.666 > Running continuously for  4:45:00 hour(s) after boot at an average of 21.76 loops per second.
+22:27:19.599 > Running continuously for  5:00:00 hour(s) after boot at an average of 21.73 loops per second.
+22:42:19.538 > Running continuously for  5:15:00 hour(s) after boot at an average of 21.68 loops per second.
+22:57:19.501 > Running continuously for  5:30:00 hour(s) after boot at an average of 21.70 loops per second.
+23:12:19.402 > Running continuously for  5:45:00 hour(s) after boot at an average of 21.61 loops per second.
+23:27:19.319 > Running continuously for  6:00:00 hour(s) after boot at an average of 21.67 loops per second.
+23:42:19.257 > Running continuously for  6:15:00 hour(s) after boot at an average of 21.69 loops per second.
+23:57:19.180 > Running continuously for  6:30:00 hour(s) after boot at an average of 21.67 loops per second.
+00:12:19.153 > Running continuously for  6:45:00 hour(s) after boot at an average of 21.65 loops per second.
+00:27:19.067 > Running continuously for  7:00:00 hour(s) after boot at an average of 21.70 loops per second.
+00:42:18.966 > Running continuously for  7:15:00 hour(s) after boot at an average of 21.65 loops per second.
+00:57:18.895 > Running continuously for  7:30:00 hour(s) after boot at an average of 21.69 loops per second.
+01:12:18.826 > Running continuously for  7:45:00 hour(s) after boot at an average of 21.69 loops per second.
+01:27:18.794 > Running continuously for  8:00:00 hour(s) after boot at an average of 21.67 loops per second.
+01:42:18.695 > Running continuously for  8:15:00 hour(s) after boot at an average of 21.70 loops per second.
+01:57:18.664 > Running continuously for  8:30:00 hour(s) after boot at an average of 21.70 loops per second.
+02:12:18.543 > Running continuously for  8:45:00 hour(s) after boot at an average of 21.69 loops per second.
+02:27:18.494 > Running continuously for  9:00:00 hour(s) after boot at an average of 21.66 loops per second.
+02:42:18.436 > Running continuously for  9:15:00 hour(s) after boot at an average of 21.69 loops per second.
+02:57:18.357 > Running continuously for  9:30:00 hour(s) after boot at an average of 21.67 loops per second.
+03:12:18.288 > Running continuously for  9:45:00 hour(s) after boot at an average of 21.65 loops per second.
+03:27:18.221 > Running continuously for 10:00:00 hour(s) after boot at an average of 21.67 loops per second.
+03:42:18.121 > Running continuously for 10:15:00 hour(s) after boot at an average of 21.70 loops per second.
+03:57:18.081 > Running continuously for 10:30:00 hour(s) after boot at an average of 21.70 loops per second.
+04:12:18.017 > Running continuously for 10:45:00 hour(s) after boot at an average of 21.69 loops per second.
+04:27:17.949 > Running continuously for 11:00:00 hour(s) after boot at an average of 21.70 loops per second.
+04:42:17.895 > Running continuously for 11:15:00 hour(s) after boot at an average of 21.67 loops per second.
+04:57:17.818 > Running continuously for 11:30:00 hour(s) after boot at an average of 21.66 loops per second.
+05:12:17.775 > Running continuously for 11:45:00 hour(s) after boot at an average of 21.69 loops per second.
+05:27:17.681 > Running continuously for 12:00:00 hour(s) after boot at an average of 21.73 loops per second.
+05:42:17.593 > Running continuously for 12:15:00 hour(s) after boot at an average of 21.67 loops per second.
+05:57:17.532 > Running continuously for 12:30:00 hour(s) after boot at an average of 21.70 loops per second.
+06:12:17.426 > Running continuously for 12:45:00 hour(s) after boot at an average of 21.69 loops per second.
+06:27:17.388 > Running continuously for 13:00:00 hour(s) after boot at an average of 21.71 loops per second.
+06:42:17.285 > Running continuously for 13:15:00 hour(s) after boot at an average of 21.69 loops per second.
+06:57:17.274 > Running continuously for 13:30:00 hour(s) after boot at an average of 21.73 loops per second.
 ```
