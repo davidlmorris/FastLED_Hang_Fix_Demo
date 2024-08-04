@@ -34,6 +34,8 @@
 #config
 .vscode
 .pio
+.pio/build
+.pio/libdeps
 
 # Build outputs
 .build/
