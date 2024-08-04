@@ -1,20 +1,20 @@
 # FastLED_Hang_Fix_Demo
 
- Demonstration and fix for FastLED.show() random hang.
+ Demonstration and fix for FastLED.show() random hang.  FastLED is a library to support the display of Addressable LED which can run on a number of MCUs including the Esp32.
+
+The Esp32 is a fast MCU, but struggles (probably because of FreeRTOS) to manage interrupts running over about 200 kilohertz.  See this [YouTube](<https://www.youtube.com/watch?v=CJhWlfkf-5M>) clip at about 8:30 for a compelling demonstration.
+
+FastLED is reported (notably [here](https://github.com/FastLED/FastLED/issues/1438)) to hang after a random amount of time usually hours after the Esp32 has started.
 
 ## Why
 
-FastLED is a library to support the display of Addressable LED which can run on a number of MCUs including the Esp32.
+The FastLed RMT driver makes extensive use of interrupts.  The comments in the FastLED driver hint at least one per 32 bits of data out.  The driver does all the sending in one hit so that even with multiple controllers (as we have in this demo) it is only when the last one is called does it finally does the work.  I am uncertain what might happen if only one controller that is not the last one is called.  (Something for a future experiment?). On a send, it waits 50 microseconds to signal a start, then starts the channels for each controller.  It then sets a semaphore which is then released when the final channel on the final controller is complete.  It appears that rarely something goes wrong here, and presumably, that interrupt is swallowed by the Esp32 system.   The result is that ESP32RMTController::showPixels() waits forever for the semaphore to be released (which it never will be) so we have a hang.  Note that this hang will occur minutes or hours into a run, depending on other factors (like load or power), and is essentially out of the control of the FastLED driver.  
 
-The Esp32 is a fast MCU, but struggles (probably because of FreeRTOS) to manage interrupts running over about 200 Kilohertz. See at about 8:30 [here] (<https://www.youtube.com/watch?v=CJhWlfkf-5M>).
-
-## The clockless RMT FastLED driver
-
-The FastLed RMT driver makes extensive use of interrupts.  The comments in the FastLED driver hint at least one per 32 bits of data out.  The driver does all the sending in one hit so that even with multiple controllers (as we have in this demo) it is only when the last one is called does it finally does the work.  I am uncertain what might happen if only one controller that is not the last one is called.  (For a future experiment). On a send, it waits 50 microseconds to signal a start, then starts the channels for each controller.  It then sets a semaphore which is then released when the final channel on the final controller is complete.  It appears that rarely something goes wrong here, and presumably, that interrupt is swallowed by the Esp32 system.   The result is that ESP32RMTController::showPixels() waits forever for the semaphore to be released (which it never will be) so we have a hang.  Note that this hang will occur minutes or hours into a run, depending on other factors (like load or power), and is essentially out of the control of the FastLED driver.  
+# The Fix
 
 The quick and dirty fix is simply to assign some timeout value to the semaphore take rather than portMAX_DELAY (line 204 for version 3.6.0 and line 223 for version 3.7.0).  
 
-We do this by this change by defining FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM to a value like (2000/portTICK_PERIOD_MS) before we call FastLED.h (see  [clockless_rmt_esp32.h](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h)).  Alternatively, we can call GiveGTX_sem(); which has been added to [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) so we can programmatically decide on the wait time.
+We do this in the modified FastLED lib forked [here](https://github.com/davidlmorris/FastLED) by defining FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM to a value like (2000/portTICK_PERIOD_MS) before we call FastLED.h (see  [clockless_rmt_esp32.h](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h)).  Alternatively, we can call GiveGTX_sem(); which has been added to [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) so we can programmatically decide on the wait time.
 
 ## Testing
 
