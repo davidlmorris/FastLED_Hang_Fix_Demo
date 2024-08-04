@@ -33,9 +33,14 @@
 
 #config
 .vscode
+
+# PlatformIO
 .pio
 .pio/build
 .pio/libdeps
+.pioenvs/
+.piolibdeps/
+.platformio/
 
 # Build outputs
 .build/
