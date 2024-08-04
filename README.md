@@ -19,7 +19,7 @@ We do this in the modified FastLED lib forked [here](https://github.com/davidlmo
 ## Quick note on the location of Libs
 Debuggery is installed in the normal way and should appear once Platformio.ini does its update thing (naturally you have to have Plafromio installed).
 
-The modified FastLED lib (until they accept my [pull](https://github.com/FastLED/FastLED/pull/1651) request) should be located in an adjacent folder in other words `..\FastLED`.  Download it from [here](https://github.com/davidlmorris/FastLED).  In platform.ini lib_deps has modified to assume that position.
+The modified FastLED lib (until they accept my [pull](https://github.com/FastLED/FastLED/pull/1651) request) should be located in an adjacent folder in other words `..\FastLED`.  Download it from [here](https://github.com/davidlmorris/FastLED).  In platform.ini lib_deps has been modified to assume that position.
 
 ```ini
 lib_deps = davidlmorris/debuggery@^1.1.9
