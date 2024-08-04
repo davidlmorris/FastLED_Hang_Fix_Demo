@@ -10,11 +10,21 @@ FastLED is reported (notably [here](https://github.com/FastLED/FastLED/issues/14
 
 The FastLed RMT driver makes extensive use of interrupts.  The comments in the FastLED driver hint at least one per 32 bits of data out.  The driver does all the sending in one hit so that even with multiple controllers (as we have in this demo) it is only when the last one is called does it finally does the work.  I am uncertain what might happen if only one controller that is not the last one is called.  (Something for a future experiment?). On a send, it waits 50 microseconds to signal a start, then starts the channels for each controller.  It then sets a semaphore which is then released when the final channel on the final controller is complete.  It appears that rarely something goes wrong here, and presumably, that interrupt is swallowed by the Esp32 system.   The result is that ESP32RMTController::showPixels() waits forever for the semaphore to be released (which it never will be) so we have a hang.  Note that this hang will occur minutes or hours into a run, depending on other factors (like load or power), and is essentially out of the control of the FastLED driver.  
 
-# The Fix
+## The Fix
 
 The quick and dirty fix is simply to assign some timeout value to the semaphore take rather than portMAX_DELAY (line 204 for version 3.6.0 and line 223 for version 3.7.0).  
 
 We do this in the modified FastLED lib forked [here](https://github.com/davidlmorris/FastLED) by defining FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM to a value like (2000/portTICK_PERIOD_MS) before we call FastLED.h (see  [clockless_rmt_esp32.h](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h)).  Alternatively, we can call GiveGTX_sem(); which has been added to [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) so we can programmatically decide on the wait time.
+
+## Quick note on the location of Libs
+Debuggery is installed in the normal way and should appear once Platformio.ini does its update thing (naturally you have to have Plafromio installed).
+
+The modified FastLED lib (until they accept my [pull](https://github.com/FastLED/FastLED/pull/1651) request) should be located in an adjacent folder in other words `..\FastLED`.  Download it from [here](https://github.com/davidlmorris/FastLED).  In platform.ini lib_deps has modified to assume that position.
+
+```ini
+lib_deps = davidlmorris/debuggery@^1.1.9
+            ..\FastLED
+```
 
 ## Testing
 
