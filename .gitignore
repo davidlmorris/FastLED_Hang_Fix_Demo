@@ -32,8 +32,8 @@
 *.app
 
 #config
-/.vscode
-
+.vscode
+.pio
 
 # Build outputs
 .build/
@@ -50,3 +50,6 @@ components/
 
 #private
 private_notes.txt
+
+# Logs
+logs/
