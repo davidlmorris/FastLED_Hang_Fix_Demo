@@ -570,4 +570,73 @@ Go back to 1.1.0 for a more normal result, or comment out `digitalWrite(DIO_TM16
 13:05:46.696 > Forcing semaphore reset try.
 13:05:46.771 > 
 13:06:37.829 > Running continuously for 32:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174757.83/sec).
+13:07:37.868 > Running continuously for 33:00 minutes(s) after boot. Speed 3.08 loops per sec (int = 174655.65/sec).
+13:08:37.621 > Running continuously for 34:00 minutes(s) after boot. Speed 3.07 loops per sec (int = 173827.33/sec).
+13:09:21.541 > Guru Meditation Error: Core  1 panic'ed (Interrupt wdt timeout on CPU1). 
+13:09:21.547 >
+13:09:21.547 > Core  1 register dump:
+13:09:21.547 > PC      : 0x400813fb  PS      : 0x00050035  A0      : 0x40084de0  A1      : 0x3ffbf23c
+13:09:21.553 > A2      : 0x00000008  A3      : 0x3ff56000  A4      : 0x01000000  A5      : 0x3ffc1c8c  
+13:09:21.564 > A6      : 0x00000008  A7      : 0x00000001  A8      : 0x3ffc1cc8  A9      : 0x00000012
+13:09:21.569 > A10     : 0x00000000  A11     : 0x00000000  A12     : 0x00000001  A13     : 0x00000004  
+13:09:21.581 > A14     : 0x00060a23  A15     : 0x00000001  SAR     : 0x0000001e  EXCCAUSE: 0x00000006
+13:09:21.586 > EXCVADDR: 0x00000000  LBEG    : 0x40084775  LEND    : 0x4008477d  LCOUNT  : 0x00000027
+13:09:21.597 > Core  1 was running in ISR context:
+13:09:21.597 > EPC1    : 0x400de31f  EPC2    : 0x00000000  EPC3    : 0x4000bff0  EPC4    : 0x00000000
+13:09:21.603 >
+13:09:21.608 >
+13:09:21.609 > Backtrace: 0x400813f8:0x3ffbf23c |<-CORRUPTED
+13:09:21.609 >
+13:09:21.609 >
+13:09:21.609 > Core  0 register dump:
+13:09:21.614 > PC      : 0x400f4fb6  PS      : 0x00060535  A0      : 0x800dd20d  A1      : 0x3ffbc7a0
+13:09:21.619 > A2      : 0x00000000  A3      : 0x40085d14  A4      : 0x00060520  A5      : 0x3ffbbc70
+13:09:21.631 > A6      : 0x007bf388  A7      : 0x003fffff  A8      : 0x800dce0e  A9      : 0x3ffbc770
+13:09:21.636 > A10     : 0x00000000  A11     : 0x3ffbf384  A12     : 0x3ffbf384  A13     : 0x00000000
+13:09:21.642 > A14     : 0x00060520  A15     : 0x00000000  SAR     : 0x0000001d  EXCCAUSE: 0x00000006  
+13:09:21.652 > EXCVADDR: 0x00000000  LBEG    : 0x00000000  LEND    : 0x00000000  LCOUNT  : 0x00000000  
+13:09:21.658 >
+13:09:21.658 >
+13:09:21.658 > Backtrace: 0x400f4fb3:0x3ffbc7a0 0x400dd20a:0x3ffbc7c0 0x400898f9:0x3ffbc7e0
+13:09:21.663 >
+13:09:21.663 >
+13:09:21.663 >
+13:09:21.667 >
+13:09:21.667 > ELF file SHA256: 24c55f94355192d9
+13:09:21.667 >
+13:09:21.786 > Rebooting...
+13:09:21.792 > ets Jun  8 2016 00:22:57
+13:09:21.792 >
+13:09:21.792 > rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+13:09:21.798 > configsip: 0, SPIWP:0xee
+13:09:21.798 > clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+13:09:21.803 > mode:DIO, clock div:2
+13:09:21.809 > load:0x3fff0030,len:1184
+13:09:21.809 > load:0x40078000,len:13232
+13:09:21.814 > load:0x40080400,len:3028
+13:09:21.814 > entry 0x400805e4
+13:09:25.043 > 
+13:09:26.043 > 
+13:09:27.048 > FastLED_Hang_Fix_Demo 1.1.1 'src/FastLED_Hang_Fix_Demo.cpp' Built: Aug  5 2024 12:34:20.
+13:09:27.054 > BOARD_NAME selected is Esp32 doitESP32devkitV1.
+13:09:27.059 > Starting comms 5.10 seconds after boot.
+13:09:27.110 > Main App running on core 1 at 240 MHz.
+13:09:27.263 > FastLED controllers[0]->size() = 256.
+13:09:27.264 > FastLED controllers[1]->size() = 256.
+13:09:27.269 > FastLED controllers[2]->size() = 470.
+13:09:27.269 > FastLED controllers[3]->size() = 470.
+13:09:27.274 > FastLED.count() = 4.
+13:09:27.326 > fastLedShowHandlerTask running on core 1.
+13:09:27.425 > FastLED Lowest frame rate in use is 70 (14 ms per frame).
+13:09:27.636 > Initialisation Complete 5.72 seconds after boot.
+13:09:28.592 > Running continuously for 00:06 seconds(s) after boot. Speed 0.02 loops per sec (int = 2721.12/sec).
+13:10:22.897 > Running continuously for 01:00 minutes(s) after boot. Speed 1.23 loops per sec (int = 158394.22/sec).
+13:11:23.044 > Running continuously for 02:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175449.75/sec).
+13:12:23.179 > Running continuously for 03:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175433.62/sec).
+13:13:23.349 > Running continuously for 04:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175529.77/sec).
+13:14:22.790 > Running continuously for 05:00 minutes(s) after boot. Speed 1.35 loops per sec (int = 173406.73/sec).
+13:15:22.928 > Running continuously for 06:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175436.35/sec).
+13:16:23.094 > Running continuously for 07:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175515.72/sec).
+13:17:23.240 > Running continuously for 08:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175449.45/sec).
+13:18:22.668 > Running continuously for 09:00 minutes(s) after boot. Speed 1.35 loops per sec (int = 173368.93/sec).
 ```
