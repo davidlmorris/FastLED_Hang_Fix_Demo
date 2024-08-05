@@ -362,3 +362,212 @@ The following run was for more than 13 hours overnight, and yet had zero hangs, 
 Upped the pathology a tad! (Ok at severe risk of guru meditation errors or worse lockups.)  But at least you get a chance to see a fastled hang earlier than typical...  finding the error sweet spot requires a bit of finessing, and you might want to play with the code a bit, since who knows, each Esp32 or board might be slightly different.
 
 Go back to 1.1.0 for a more normal result, or comment out `digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);` lines, and/or play around with the `void IRAM_ATTR onTimer()` call or vTaskDelay to see if you can tweak the number of hangs.
+
+## Update 1.1.2 - 2024-08-05 Forcing the error for the even more impatient
+
+- Upped the pathology even more!  This should give Jams within a minute or 10.  And only the occasional Guru Meditation.
+- Changed the update time ('I'm still alive message') from 15 mins to 1 min.
+
+```text
+12:34:42.509 > FastLED_Hang_Fix_Demo 1.1.1 'src/FastLED_Hang_Fix_Demo.cpp' Built: Aug  5 2024 12:34:20.
+12:34:42.515 > BOARD_NAME selected is Esp32 doitESP32devkitV1.
+12:34:42.520 > Starting comms 5.10 seconds after boot.
+12:34:42.571 > Main App running on core 1 at 240 MHz.
+12:34:42.724 > FastLED controllers[0]->size() = 256.
+12:34:42.725 > FastLED controllers[1]->size() = 256.
+12:34:42.730 > FastLED controllers[2]->size() = 470.
+12:34:42.730 > FastLED controllers[3]->size() = 470.
+12:34:42.735 > FastLED.count() = 4.
+12:34:42.786 > fastLedShowHandlerTask running on core 1.
+12:34:42.885 > FastLED Lowest frame rate in use is 70 (14 ms per frame).
+12:34:43.098 > Initialisation Complete 5.72 seconds after boot.
+12:34:44.053 > Running continuously for 00:06 seconds(s) after boot. Speed 0.02 loops per sec (int = 2704.78/sec).
+12:35:38.369 > Running continuously for 01:00 minutes(s) after boot. Speed 1.23 loops per sec (int = 158436.83/sec).
+12:36:38.529 > Running continuously for 02:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175498.93/sec).
+12:37:38.654 > Running continuously for 03:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175398.53/sec).
+12:38:38.820 > Running continuously for 04:01 minutes(s) after boot. Speed 1.37 loops per sec (int = 175516.65/sec).
+12:39:38.267 > Running continuously for 05:00 minutes(s) after boot. Speed 1.35 loops per sec (int = 173415.20/sec).
+12:40:37.814 > Running continuously for 06:00 minutes(s) after boot. Speed 1.45 loops per sec (int = 173636.58/sec).
+12:41:05.083 > 
+12:41:05.086 > FastLED.Show() has jammed after 6.46 minutes since boot!
+12:41:05.184 > Forcing semaphore reset try.
+12:41:05.260 > 
+12:41:37.886 > Running continuously for 07:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174777.00/sec).
+12:41:46.381 > 
+12:41:46.383 > FastLED.Show() has jammed after 7.15 minutes since boot!
+12:41:46.482 > Forcing semaphore reset try.
+12:41:46.556 > 
+12:42:12.599 > 
+12:42:12.600 > FastLED.Show() has jammed after 7.59 minutes since boot!
+12:42:12.698 > Forcing semaphore reset try.
+12:42:12.773 > 
+12:42:37.946 > Running continuously for 08:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174738.18/sec).
+12:43:06.819 > 
+12:43:06.821 > FastLED.Show() has jammed after 8.49 minutes since boot!
+12:43:06.920 > Forcing semaphore reset try.
+12:43:06.993 > 
+12:43:37.999 > Running continuously for 09:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174708.20/sec).
+12:43:52.325 > 
+12:43:52.327 > FastLED.Show() has jammed after 9.25 minutes since boot!
+12:43:52.427 > Forcing semaphore reset try.
+12:43:52.501 > 
+12:44:28.207 > 
+12:44:28.209 > FastLED.Show() has jammed after 9.85 minutes since boot!
+12:44:28.307 > Forcing semaphore reset try.
+12:44:28.383 > 
+12:44:37.730 > Running continuously for 10:00 minutes(s) after boot. Speed 2.97 loops per sec (int = 173782.18/sec).
+12:44:54.964 > 
+12:44:54.965 > FastLED.Show() has jammed after 10.29 minutes since boot!
+12:44:55.066 > Forcing semaphore reset try.
+12:44:55.142 > 
+12:45:24.400 > 
+12:45:24.408 > FastLED.Show() has jammed after 10.78 minutes since boot!
+12:45:24.499 > Forcing semaphore reset try.
+12:45:24.575 > 
+12:45:37.787 > Running continuously for 11:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174721.70/sec).
+12:46:29.925 > 
+12:46:29.927 > FastLED.Show() has jammed after 11.88 minutes since boot!
+12:46:30.028 > Forcing semaphore reset try.
+12:46:30.102 > 
+12:46:37.819 > Running continuously for 12:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174653.53/sec).
+12:47:07.664 > 
+12:47:07.665 > FastLED.Show() has jammed after 12.51 minutes since boot!
+12:47:07.764 > Forcing semaphore reset try.
+12:47:07.839 > 
+12:47:35.794 > 
+12:47:35.796 > FastLED.Show() has jammed after 12.97 minutes since boot!
+12:47:35.896 > Forcing semaphore reset try.
+12:47:35.971 > 
+12:47:37.865 > Running continuously for 13:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174690.52/sec).
+12:48:15.478 > 
+12:48:15.479 > FastLED.Show() has jammed after 13.64 minutes since boot!
+12:48:15.580 > Forcing semaphore reset try.
+12:48:15.654 > 
+12:48:37.917 > Running continuously for 14:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174712.72/sec).
+12:49:28.455 > 
+12:49:28.457 > FastLED.Show() has jammed after 14.85 minutes since boot!
+12:49:28.557 > Forcing semaphore reset try.
+12:49:28.631 > 
+12:49:37.969 > Running continuously for 15:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174704.87/sec).
+12:50:13.940 > 
+12:50:13.942 > FastLED.Show() has jammed after 15.61 minutes since boot!
+12:50:14.042 > Forcing semaphore reset try.
+12:50:14.116 > 
+12:50:26.871 > 
+12:50:26.873 > FastLED.Show() has jammed after 15.83 minutes since boot!
+12:50:26.974 > Forcing semaphore reset try.
+12:50:27.048 > 
+12:50:33.016 > 
+12:50:33.018 > FastLED.Show() has jammed after 15.93 minutes since boot!
+12:50:33.117 > Forcing semaphore reset try.
+12:50:33.191 > 
+12:50:37.676 > Running continuously for 16:00 minutes(s) after boot. Speed 2.92 loops per sec (int = 173722.02/sec).
+12:50:49.751 > 
+12:50:49.752 > FastLED.Show() has jammed after 16.21 minutes since boot!
+12:50:49.853 > Forcing semaphore reset try.
+12:50:49.928 > 
+12:51:37.771 > Running continuously for 17:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174838.70/sec).
+12:52:05.693 > 
+12:52:05.696 > FastLED.Show() has jammed after 17.47 minutes since boot!
+12:52:05.795 > Forcing semaphore reset try.
+12:52:05.870 > 
+12:52:37.853 > Running continuously for 18:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174793.22/sec).
+12:53:29.030 > 
+12:53:29.031 > FastLED.Show() has jammed after 18.86 minutes since boot!
+12:53:29.131 > Forcing semaphore reset try.
+12:53:29.205 > 
+12:53:37.894 > Running continuously for 19:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174675.67/sec).
+12:53:49.958 > 
+12:53:49.960 > FastLED.Show() has jammed after 19.21 minutes since boot!
+12:53:50.060 > Forcing semaphore reset try.
+12:53:50.134 > 
+12:53:55.791 > 
+12:53:55.793 > FastLED.Show() has jammed after 19.31 minutes since boot!
+12:53:55.894 > Forcing semaphore reset try.
+12:53:55.969 > 
+12:54:23.271 > 
+12:54:23.273 > FastLED.Show() has jammed after 19.77 minutes since boot!
+12:54:23.373 > Forcing semaphore reset try.
+12:54:23.448 > 
+12:54:26.188 > 
+12:54:26.190 > FastLED.Show() has jammed after 19.82 minutes since boot!
+12:54:26.290 > Forcing semaphore reset try.
+12:54:26.366 > 
+12:54:36.224 > 
+12:54:36.226 > FastLED.Show() has jammed after 19.98 minutes since boot!
+12:54:36.325 > Forcing semaphore reset try.
+12:54:36.400 > 
+12:54:37.646 > Running continuously for 20:00 minutes(s) after boot. Speed 2.82 loops per sec (int = 173866.67/sec).
+12:54:58.763 > 
+12:54:58.764 > FastLED.Show() has jammed after 20.36 minutes since boot!
+12:54:58.864 > Forcing semaphore reset try.
+12:54:58.939 > 
+12:55:19.130 > 
+12:55:19.133 > FastLED.Show() has jammed after 20.70 minutes since boot!
+12:55:19.232 > Forcing semaphore reset try.
+12:55:19.306 > 
+12:55:37.697 > Running continuously for 21:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174716.12/sec).
+12:55:52.980 > 
+12:55:52.980 > FastLED.Show() has jammed after 21.26 minutes since boot!
+12:55:53.081 > Forcing semaphore reset try.
+12:55:53.154 > 
+12:56:27.931 > 
+12:56:27.933 > FastLED.Show() has jammed after 21.84 minutes since boot!
+12:56:28.035 > Forcing semaphore reset try.
+12:56:28.109 > 
+12:56:37.768 > Running continuously for 22:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174779.80/sec).
+12:57:37.808 > Running continuously for 23:00 minutes(s) after boot. Speed 3.08 loops per sec (int = 174660.20/sec).
+12:58:01.835 > 
+12:58:01.835 > FastLED.Show() has jammed after 23.41 minutes since boot!
+12:58:01.937 > Forcing semaphore reset try.
+12:58:02.013 > 
+12:58:37.880 > Running continuously for 24:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174760.48/sec).
+12:59:07.740 > 
+12:59:07.742 > FastLED.Show() has jammed after 24.51 minutes since boot!
+12:59:07.840 > Forcing semaphore reset try.
+12:59:07.917 > 
+12:59:21.654 > 
+12:59:21.656 > FastLED.Show() has jammed after 24.74 minutes since boot!
+12:59:21.757 > Forcing semaphore reset try.
+12:59:21.831 > 
+12:59:37.636 > Running continuously for 25:00 minutes(s) after boot. Speed 2.97 loops per sec (int = 173864.68/sec).
+13:00:23.341 > 
+13:00:23.343 > FastLED.Show() has jammed after 25.77 minutes since boot!
+13:00:23.443 > Forcing semaphore reset try.
+13:00:23.518 > 
+13:00:37.709 > Running continuously for 26:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174762.83/sec).
+13:01:37.786 > Running continuously for 27:00 minutes(s) after boot. Speed 3.08 loops per sec (int = 174775.97/sec).
+13:01:45.316 > 
+13:01:45.318 > FastLED.Show() has jammed after 27.13 minutes since boot!
+13:01:45.416 > Forcing semaphore reset try.
+13:01:45.489 > 
+13:02:15.698 > 
+13:02:15.699 > FastLED.Show() has jammed after 27.64 minutes since boot!
+13:02:15.799 > Forcing semaphore reset try.
+13:02:15.873 > 
+13:02:37.832 > Running continuously for 28:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174698.00/sec).
+13:03:26.137 > 
+13:03:26.138 > FastLED.Show() has jammed after 28.81 minutes since boot!
+13:03:26.238 > Forcing semaphore reset try.
+13:03:26.312 > 
+13:03:37.916 > Running continuously for 29:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174804.00/sec).
+13:04:29.467 > 
+13:04:29.468 > FastLED.Show() has jammed after 29.87 minutes since boot!
+13:04:29.569 > Forcing semaphore reset try.
+13:04:29.644 > 
+13:04:37.685 > Running continuously for 30:00 minutes(s) after boot. Speed 3.02 loops per sec (int = 173883.68/sec).
+13:04:50.396 > 
+13:04:50.397 > FastLED.Show() has jammed after 30.22 minutes since boot!
+13:04:50.496 > Forcing semaphore reset try.
+13:04:50.572 > 
+13:05:37.764 > Running continuously for 31:00 minutes(s) after boot. Speed 3.03 loops per sec (int = 174779.97/sec).
+13:05:43.354 > 
+13:05:43.355 > FastLED.Show() has jammed after 31.10 minutes since boot!
+13:05:43.456 > Forcing semaphore reset try.
+13:05:43.530 > 
+13:05:46.594 > 
+13:05:46.596 > FastLED.Show() has jammed after 31.16 minutes since boot!
+13:05:46.696 > Forcing semaphore reset try.
+13:05:46.771 > 
+13:06:37.829 > Running continuously for 32:00 minutes(s) after boot. Speed 2.98 loops per sec (int = 174757.83/sec).
+```
