@@ -357,8 +357,8 @@ The following run was for more than 13 hours overnight, and yet had zero hangs, 
 06:57:17.274 > Running continuously for 13:30:00 hour(s) after boot at an average of 21.73 loops per second.
 ```
 
-## Update 1.1.1 - 2024-08-05 Forcing the error!
+## Update 1.1.1 - 2024-08-05 Forcing the error
 
 Upped the pathology a tad! (Ok at severe risk of guru meditation errors or worse lockups.)  But at least you get a chance to see a fastled hang earlier than typical...  finding the error sweet spot requires a bit of finessing, and you might want to play with the code a bit, since who knows, each Esp32 or board might be slightly different.
 
-Go back to 1.1.0 for a more normal result, or comment out `digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);` lines, and/or play arround with the `void IRAM_ATTR onTimer()` call or vTaskDelay to see if you can tweak the number of hangs.
+Go back to 1.1.0 for a more normal result, or comment out `digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);` lines, and/or play around with the `void IRAM_ATTR onTimer()` call or vTaskDelay to see if you can tweak the number of hangs.
