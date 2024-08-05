@@ -14,7 +14,7 @@
 # error "This code requires an ESP32"
 #endif
 
-// this bit borrowed from https://github.com/SensorsIot/ESP32-Interrupts-deepsleep/blob/master/Frequency_Counter_with_Timer_Interrupt/Frequency_Counter_with_Timer_Interrupt.ino
+// This pathological timer interrupt borrowed (and then so heavily modified you wouldn't know it) from https://github.com/SensorsIot/ESP32-Interrupts-deepsleep/blob/master/Frequency_Counter_with_Timer_Interrupt/Frequency_Counter_with_Timer_Interrupt.ino
 // because I need some interrupts to do something...
 
 volatile unsigned long count = 0;
@@ -28,12 +28,15 @@ portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 void IRAM_ATTR onTimer()
     {
     portENTER_CRITICAL_ISR(&timerMux);
-    // Add this next line for more pathology!
-    // digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);
 
+    digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);
     outVal = !outVal;
+
     frequency = count;
     count++;
+    // frequency++;
+    digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);
+    outVal = !outVal;
     portEXIT_CRITICAL_ISR(&timerMux);
     }
 
@@ -122,6 +125,8 @@ void setup(void)
         DEBUG_DELAY(xTickATinyBit);
         DEBUG_SEMAPHORE_RELEASE;
         }
+    count = 0;
+    frequency = count;
     }
 
 
@@ -135,9 +140,11 @@ void loop(void)
     static unsigned long loopTime = 0;
 #endif    
 
+    vTaskDelay(xTickATinyBit);
     paint_random_leds(); // Add some random data to the LEDs
     vTaskDelay(pdMS_TO_TICKS(1));
     FastLEDshow(); // Now show the LEDs
+
 #if DEBUG_ON    
     loopTime++;
     if (bReport)
@@ -174,11 +181,11 @@ void loop(void)
                     DEBUG_PRINT(" seconds(s) ");
                     }
                 }
-            DEBUG_PRINT("after boot at an average of ");
+            DEBUG_PRINT("after boot. Speed ");
             DEBUG_PRINT((float) (loopTime / (MINUTES_BETWEEN_REPORTS * 60.0)),2);
-            DEBUG_PRINT(" loops per second (interrupts = ");
-            DEBUG_PRINT(frequency);
-            DEBUG_PRINTLN(").");
+            DEBUG_PRINT(" loops per sec (int = ");
+            DEBUG_PRINT(frequency/(MINUTES_BETWEEN_REPORTS * 60.0));
+            DEBUG_PRINTLN("/sec).");
             loopTime = 0;
             frequency = 0;
             DEBUG_DELAY(xTickATinyBit);
