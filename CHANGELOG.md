@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.1.2 - 2024-08-05
 
-- Upped the pathology even more!  This should give Jams within a minute.
+- Upped the pathology even more!  This should give Jams within a minute or 10.
 
 ## 1.1.1 - 2024-08-05
 
