@@ -8,7 +8,7 @@
 /// NO NEED TO HOOK THIS UP
 /// Just run it on an isolated Esp32.
 
-#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.0"
+#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.1"
 
 #ifndef ESP32
 # error "This code requires an ESP32"
