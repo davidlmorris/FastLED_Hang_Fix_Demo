@@ -8,7 +8,7 @@
 /// NO NEED TO HOOK THIS UP
 /// Just run it on an isolated Esp32.
 
-#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.1"
+#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.2"
 
 #ifndef ESP32
 # error "This code requires an ESP32"
@@ -28,15 +28,10 @@ portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 void IRAM_ATTR onTimer()
     {
     portENTER_CRITICAL_ISR(&timerMux);
-
     digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);
     outVal = !outVal;
-
-    frequency = count;
-    count++;
-    // frequency++;
+    frequency++;
     digitalWrite(DIO_TM1637_DIGIT_DISPLAY, outVal);
-    outVal = !outVal;
     portEXIT_CRITICAL_ISR(&timerMux);
     }
 
@@ -104,7 +99,7 @@ void setup(void)
 
 // Some pathological interrupt stuff to run in the background
     pinMode(DIO_TM1637_DIGIT_DISPLAY, OUTPUT);
-    timer = timerBegin(0, 80, true);
+    timer = timerBegin(0, 91, true);
     timerAttachInterrupt(timer, &onTimer, true);
     timerAlarmWrite(timer, 5, true);
     timerAlarmEnable(timer);
@@ -130,7 +125,7 @@ void setup(void)
     }
 
 
-#define MINUTES_BETWEEN_REPORTS 15
+#define MINUTES_BETWEEN_REPORTS 1
 #define NUMBER_BUFFER 33
 
 void loop(void)
@@ -198,6 +193,7 @@ void loop(void)
         bReport = true;
         }
 #endif
+    vTaskDelay(xTickATinyBit);
     taskYIELD();
     }
 
