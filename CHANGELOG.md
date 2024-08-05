@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 1.1.2 - 2024-08-05
 
 - Upped the pathology even more!  This should give Jams within a minute or 10.
+- Changed the update time ('I'm still alive message') from 15 mins to 1 min. 
 
 ## 1.1.1 - 2024-08-05
 
