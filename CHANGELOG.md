@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 1.1.3 - 2024-08-08
 
-- Fixed time display so we no longer have decimal minute in the Jamming part too, and move the seconds calc to debug_`conditionals.cpp`.
+- Fixed time display so we no longer have a decimal minute in the Jamming part too, and moved the seconds calc to debug_`conditionals.cpp`.
 - Removed random Wifi lib!
 
 ## 1.1.2 - 2024-08-05
