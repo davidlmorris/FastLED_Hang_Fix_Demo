@@ -3,6 +3,9 @@
 // Showing #defines at compile time cf https://stackoverflow.com/a/10791845/3137
 // #define XSTR(x) STR(x)
 // #define STR(x) #x
+
+#ifndef _FAST_LED_HANG_FIX_DEMO_H_
+#define _FAST_LED_HANG_FIX_DEMO_H_
 #define NO_OF_ELEMS(x) (sizeof(x)/sizeof((x)[0]))
 
 #if defined(ESP32)
@@ -85,3 +88,6 @@ GPIO 15 (must be HIGH during boot)
 # error "MCU needs to be an Esp32"
 #endif
 
+
+
+#endif /* _FAST_LED_HANG_FIX_DEMO_H_ */

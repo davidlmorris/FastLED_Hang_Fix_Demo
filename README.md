@@ -1,8 +1,10 @@
 # FastLED_Hang_Fix_Demo
 
+#### Quick note.. this issue below has been fixed with by the option of adding `#define FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM (2000/portTICK_PERIOD_MS)` (just) before you include "FastLED.h" from FastLED version [3.7.1](https://github.com/FastLED/FastLED/releases/tag/3.7.1). See below for more.
+
  Demonstration and fix for FastLED.show() random hang.  FastLED is a library to support the display of Addressable LED which can run on a number of MCUs including the Esp32.
 
-The Esp32 is a fast MCU, but struggles (probably because of FreeRTOS) to manage interrupts running over about 200 kilohertz.  See this [YouTube](<https://www.youtube.com/watch?v=CJhWlfkf-5M>) clip at about 8:30 for a compelling demonstration.
+The Esp32 is a fast MCU, but struggles (probably because of FreeRTOS) to manage interrupts running over about 200 kilohertz.  See this [YouTube clip](<https://www.youtube.com/watch?v=CJhWlfkf-5M>) at about 8:30 for a compelling demonstration.
 
 FastLED is reported (notably [here](https://github.com/FastLED/FastLED/issues/1438)) to hang after a random amount of time usually hours after the Esp32 has started.
 
@@ -14,26 +16,27 @@ The FastLed RMT driver makes extensive use of interrupts.  The comments in the F
 
 The quick and dirty fix is simply to assign some timeout value to the semaphore take rather than portMAX_DELAY (line 204 for version 3.6.0 and line 223 for version 3.7.0).  
 
-We do this in the modified FastLED lib forked [here](https://github.com/davidlmorris/FastLED) by defining FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM to a value like (2000/portTICK_PERIOD_MS) before we call FastLED.h (see  [clockless_rmt_esp32.h](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h)).  Alternatively, we can call GiveGTX_sem(); which has been added to [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) so we can programmatically decide on the wait time.
+We do this in FastLED version [3.7.1](https://github.com/FastLED/FastLED/releases/tag/3.7.1) (added August 8 2024) by changing FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM to a value like (2000/portTICK_PERIOD_MS) before we call FastLED.h (see  [clockless_rmt_esp32.h](https://github.com/FastLED/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h)).  Alternatively, we can call GiveGTX_sem(); which has been added to [clockless_rmt_esp32.cpp](https://github.com/FastLED/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) so we can programmatically decide on the wait time.
+
+(cf Pull request... https://github.com/FastLED/FastLED/pull/1651. )
 
 ## Quick note on the location of Libs
 Debuggery is installed in the normal way and should appear once Platformio.ini does its update thing (naturally you have to have Plafromio installed).
 
-The modified FastLED lib (until they accept my [pull](https://github.com/FastLED/FastLED/pull/1651) request) should be located in an adjacent folder in other words `..\FastLED`.  Download it from [here](https://github.com/davidlmorris/FastLED).  In platform.ini lib_deps has been modified to assume that position.
+~~The modified FastLED lib (until they accept my [pull](https://github.com/FastLED/FastLED/pull/1651) request) should be located in an adjacent folder in other words `..\FastLED`.  Download it from [here](https://github.com/davidlmorris/FastLED).~~  
 
 ```ini
 lib_deps = davidlmorris/debuggery@^1.1.9
-            ..\FastLED
+            FastLED/FastLED@^3.7.1
 ```
 
 ## Testing
 
-The sample code here relies on two libraries the modified version of [FastLED](https://github.com/davidlmorris/FastLED) and [debuggery](https://github.com/davidlmorris/debuggery) (just to be able to display information more easily).  Debuggery is registered with both Platformio and Arduino, so you can download the latest version through their normal process, or download the zip directly.  The easiest way to use this version of FastLED is simply to navigate to `FastLED\src\platforms\esp\32\` and download [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) and [clockless_rmt_esp32.h](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h) into the same location of your local copy of the FastLED library, as these are the only files that have any modifications.
+The sample code here relies on two libraries [FastLED 3.7.1](https://github.com/FastLED/FastLED/releases/tag/3.7.1) (which includes the fix) and [debuggery](https://github.com/davidlmorris/debuggery) (just to be able to display information more easily).  Debuggery is registered with both Platformio and Arduino, so you can download the latest version through their normal process, or download the zip directly.
 
-To run this code in the Arduino environment you will need to change the name of FastLED_Hang_Fix_Demo.cpp to FastLED_Hang_Fix_Demo.ino.  
-Otherwise this should be set to run in the Plafromio environment as is.
+To run this code in the Arduino environment you will need to change the name of FastLED_Hang_Fix_Demo.cpp to FastLED_Hang_Fix_Demo.ino. Otherwise, this should be set to run in the Plafromio environment as is.
 
-You do not need to add any additional hardware to the Esp32.  
+You do not need to add any additional hardware to the Esp32.
 
 It is best to make sure you are creating a log file, and receiving data from the Serial port.  Run this overnight, or on a computer you are not using since as mentioned elsewhere this may take hours (longest I had was 17 hours) or perhaps even days to occur.
 
@@ -43,7 +46,7 @@ If you are having the 'random hangs' problem on the Esp32 using the RMT driver t
 
 You need to dive deep into the FastLED lib to \FastLED\src\platforms\esp\32\clockless_rmt_esp32.cpp line 204 for version 3.6.0 and line 223 for version 3.70.
 
-To make it easy I've added the following to [clockless_rmt_esp32.h](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h):
+To make it easy I've added the following to [clockless_rmt_esp32.h](https://github.com/FastLED/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.h):
 
 ```cpp
 // This is work-around for the issue of random fastLed freezes randomly sometimes minutes
@@ -75,7 +78,7 @@ To show the Leds we have a task running (on core 1, the same as FastLed and the 
 
 Otherwise, after a second if it is still blocked (NotShowing =false:- meaning FastLED.Show() has jammed) it will display a message.  After another second, the 'so something' to the RMT driver from the message above will activate, and if that fails in another 13 seconds it will reboot the Esp32.
 
-The 'so something' will either be a call GiveGTX_sem(); which we have added to [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp) if we have set DEBUG_USE_PORT_MAX_DELAY_FOR_GTX_SEM or a wait for the time out we have set in FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM (the other change we made to [clockless_rmt_esp32.cpp](https://github.com/davidlmorris/FastLED/tree/master/src/platforms/esp/32/clockless_rmt_esp32.cpp)).
+The 'so something' will either be a call GiveGTX_sem(); which has been added to `clockless_rmt_esp32.cpp` if we have set DEBUG_USE_PORT_MAX_DELAY_FOR_GTX_SEM or a wait for the time out we have set in FASTLED_RMT_MAX_TICKS_FOR_GTX_SEM (the other change we made to `clockless_rmt_esp32.cpp`).
 
 ```cpp
 /// @brief Used as a replacement for FastLED.Show() to minimise hangs and crashes

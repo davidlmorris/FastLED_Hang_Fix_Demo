@@ -3,12 +3,7 @@
 		{
 			"path": ".",
 			"name": "FastLED_Hang_Fix_Demo",
-		},
-		{
-			"path": "../FastLED",
-			"name": "../FastLED",
 		}
-
 	],
 	"settings": {
 		"files.associations": {
