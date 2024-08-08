@@ -6,7 +6,10 @@
 
 #ifndef _FAST_LED_HANG_FIX_DEMO_H_
 #define _FAST_LED_HANG_FIX_DEMO_H_
+
+#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.3"
 #define NO_OF_ELEMS(x) (sizeof(x)/sizeof((x)[0]))
+
 
 #if defined(ESP32)
 

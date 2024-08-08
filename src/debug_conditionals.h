@@ -1,6 +1,8 @@
 #ifndef _DEBUG_CONDITIONALS_H_
 # define _DEBUG_CONDITIONALS_H_
 
+#include <Arduino.h>
+
 // Why is this file here:
 // We want to have an independent file we can use for different apps
 // and for different files including other cpp file in the same app.
@@ -36,6 +38,8 @@ extern const unsigned long xTickFiveSecs;
 # define FASTLED_RMT_SERIAL_DEBUG  1
 
 // Debugging defines:
+# define NUMBER_BUFFER 33
+extern  void debugDisplaySeconds(const char* sMessage, uint32_t seconds_run_time);
 
 # define DEBUG_FASTLED_JAM true
 # define DEBUG_UPDATE_FREQUENCY false  // Show number of loops per second every minute.

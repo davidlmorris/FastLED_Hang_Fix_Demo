@@ -8,6 +8,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.3 - 2024-08-08
+
+- Fixed time display so we no longer have decimal minute in the Jamming part too, and move the seconds calc to debug_`conditionals.cpp`.
+- Removed random Wifi lib!
+
 ## 1.1.2 - 2024-08-05
 
 - Upped the pathology even more!  This should give Jams within a minute or 10.

@@ -13,7 +13,7 @@
 bool bFastLedReady = false;
 bool bFastLedInitialised = false;
 
-CLEDController* controllers[NUM_FASTLED_CONTROLLERS] = {NULL};
+CLEDController* controllers[NUM_FASTLED_CONTROLLERS] = { NULL };
 
 
 static volatile bool NotShowing = true;
@@ -25,8 +25,8 @@ TaskHandle_t FastLedShowHandlerTaskSignal = NULL;
 float lowestFrameRateInUse = 400;
 uint16_t frameRateInMilliseconds = 400;
 
- void IRAM_ATTR fastLedShowHandlerTask(void* param);
- void setupFastLedShowHandlerTask(void);
+void IRAM_ATTR fastLedShowHandlerTask(void* param);
+void setupFastLedShowHandlerTask(void);
 
 #define WRITE_FASTLED_SHOW_PRIORITY 1
 #define WRITE_FASTLED_SHOW_CORE 1
@@ -44,30 +44,30 @@ uint16_t frameRateInMilliseconds = 400;
 #define STRAND_SIZE3 470
 #define STRAND_SIZE4 470
 
-struct CRGB ledStrand1[STRAND_SIZE1] = { 0};
-struct CRGB ledStrand2[STRAND_SIZE2] = { 0};
+struct CRGB ledStrand1[STRAND_SIZE1] = { 0 };
+struct CRGB ledStrand2[STRAND_SIZE2] = { 0 };
 
 uint8_t uiBrightness = 255;
 // Mixing the variables up to show that the LED strands do not have to occupy contiguous memory.
 
-struct CRGB ledStrand3[STRAND_SIZE3] = { 0};
-struct CRGB ledStrand4[STRAND_SIZE4] = { 0};
+struct CRGB ledStrand3[STRAND_SIZE3] = { 0 };
+struct CRGB ledStrand4[STRAND_SIZE4] = { 0 };
 
 void clear_all_leds(void)
     {
-    for(int i = 0; i < STRAND_SIZE1;i++)
+    for (int i = 0; i < STRAND_SIZE1;i++)
         {
         ledStrand1[i] = CRGB::Black;
         }
-    for(int i = 0; i < STRAND_SIZE2;i++)
+    for (int i = 0; i < STRAND_SIZE2;i++)
         {
         ledStrand2[i] = CRGB::Black;
         }
-    for(int i = 0; i < STRAND_SIZE3;i++)
+    for (int i = 0; i < STRAND_SIZE3;i++)
         {
         ledStrand3[i] = CRGB::Black;
         }
-    for(int i = 0; i < STRAND_SIZE4;i++)
+    for (int i = 0; i < STRAND_SIZE4;i++)
         {
         ledStrand4[i] = CRGB::Black;
         }
@@ -75,29 +75,29 @@ void clear_all_leds(void)
 
 void paint_random_leds(void)
     {
-    for(int i = 0; i < STRAND_SIZE1;i++)
+    for (int i = 0; i < STRAND_SIZE1;i++)
         {
-        ledStrand1[i].r = random8(255);  
-        ledStrand1[i].g = random8(255);  
-        ledStrand1[i].b = random8(255);  
+        ledStrand1[i].r = random8(255);
+        ledStrand1[i].g = random8(255);
+        ledStrand1[i].b = random8(255);
         }
-    for(int i = 0; i < STRAND_SIZE2;i++)
+    for (int i = 0; i < STRAND_SIZE2;i++)
         {
-        ledStrand2[i].r = random8(255);  
-        ledStrand2[i].g = random8(255);  
-        ledStrand2[i].b = random8(255);  
+        ledStrand2[i].r = random8(255);
+        ledStrand2[i].g = random8(255);
+        ledStrand2[i].b = random8(255);
         }
-    for(int i = 0; i < STRAND_SIZE3;i++)
+    for (int i = 0; i < STRAND_SIZE3;i++)
         {
-        ledStrand3[i].r = random8(255);  
-        ledStrand3[i].g = random8(255);  
-        ledStrand3[i].b = random8(255);  
+        ledStrand3[i].r = random8(255);
+        ledStrand3[i].g = random8(255);
+        ledStrand3[i].b = random8(255);
         }
-    for(int i = 0; i < STRAND_SIZE4;i++)
+    for (int i = 0; i < STRAND_SIZE4;i++)
         {
-        ledStrand4[i].r = random8(255);  
-        ledStrand4[i].g = random8(255);  
-        ledStrand4[i].b = random8(255);  
+        ledStrand4[i].r = random8(255);
+        ledStrand4[i].g = random8(255);
+        ledStrand4[i].b = random8(255);
         }
     }
 
@@ -143,7 +143,7 @@ void fastLedSetup(void)
 float fastLedCalcFrameRate(uint16_t numberOfLeds)
     {
   // assume WS2812 or WS2812B at 800 kilobits/sec 
-    float frameRate = (800000.0 / 24.0 / (float) numberOfLeds) - (50.0 / 1000000.0);
+    float frameRate = (800000.0 / 24.0 / (float)numberOfLeds) - (50.0 / 1000000.0);
     if (frameRate < lowestFrameRateInUse)
         {
         lowestFrameRateInUse = frameRate;
@@ -156,7 +156,7 @@ float fastLedCalcFrameRate(uint16_t numberOfLeds)
 /// @param  
 void fastLedPostInit(void)
     {
-    frameRateInMilliseconds = (uint16_t) floor(1000.0 / lowestFrameRateInUse);
+    frameRateInMilliseconds = (uint16_t)floor(1000.0 / lowestFrameRateInUse);
     uint16_t uiLowestFrameRateInUse = floor(lowestFrameRateInUse);
     FastLED.setMaxRefreshRate(uiLowestFrameRateInUse, true);
     // This will force a delay in FastLED.show.
@@ -189,9 +189,6 @@ void fastLedPostInit(void)
 
 // Ideally, we won't get below a frame rate of 60hz.
     }
-
-
-
 
 
 /// @brief Used as a replacement for FastLED.Show() to minimise hangs and crashes
@@ -234,9 +231,10 @@ void FastLEDshow(void)
                 DEBUG_START_SEMAPHORE_BLOCK
                     {
                     DEBUG_PRINTLN("");
-                    DEBUG_PRINT("FastLED.Show() has jammed after ");
-                    DEBUG_PRINT((esp_timer_get_time() / 1000000.0) / 60.0);
-                    DEBUG_PRINT(" minutes since boot!");
+                    debugDisplaySeconds("FastLED.Show() has jammed after ", 
+                                        uint32_t (esp_timer_get_time() / 1000000.0));
+                    DEBUG_PRINT(" since boot!");
+
                     DEBUG_PRINTLN("");
                     DEBUG_DELAY(xTickATinyBit);
     # if DEBUG_USE_PORT_MAX_DELAY_FOR_GTX_SEM
@@ -247,7 +245,7 @@ void FastLEDshow(void)
                     DEBUG_DELAY(xTickATinyBit);
                     DEBUG_PRINTLN("");
                     DEBUG_SEMAPHORE_RELEASE;
-                }
+                    }
                 vTaskDelay(pdMS_TO_TICKS(500));
 # endif            
 # if DEBUG_USE_PORT_MAX_DELAY_FOR_GTX_SEM
@@ -268,16 +266,17 @@ void FastLEDshow(void)
                 DEBUG_START_SEMAPHORE_BLOCK
                     {
                     DEBUG_PRINTLN("");
-                    DEBUG_PRINT("FastLED.Show() has jammed after ");
-                    DEBUG_PRINT((esp_timer_get_time() / 1000000.0) / 60.0);
-                    DEBUG_PRINT(" minutes since boot!");
+                    debugDisplaySeconds("FastLED.Show() is still jammed after ", 
+                                        uint32_t (esp_timer_get_time() / 1000000.0));   
+                    DEBUG_PRINTLN(" since boot!");                 
+                    DEBUG_PRINTLN("Restarting now!");                 
                     DEBUG_PRINTLN("");
                     DEBUG_DELAY(xTickATinyBit);
                     DEBUG_PRINTLN("");
                     DEBUG_PRINTLN("");
                     DEBUG_PRINTLN("");
                     DEBUG_SEMAPHORE_RELEASE;
-                }
+                    }
                 vTaskDelay(pdMS_TO_TICKS(500));
 # endif            
                 ESP.restart();

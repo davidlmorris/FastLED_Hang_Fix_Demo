@@ -1,7 +1,12 @@
 #ifndef _DISPLAY_FAST_LED_COMMON_H_
 #define _DISPLAY_FAST_LED_COMMON_H_
 
+#include <Arduino.h>
 #include "debug_conditionals.h"
+
+
+
+
 
 // THIS was ONLY USED for testing and relied on the following code
 // being added to the FastLED lib in FastLED\src\platforms\esp\32\clockless_rmt_esp32.cpp
@@ -141,8 +146,6 @@ following line *before* you include FastLED.h:  #define FASTLED_ESP32_FLASH_LOCK
 // (In my case I am using a 5V 10 amp power supply for the LED strips)
 #define MAX_MILLIAMPS 10000                  
 // #define MAX_MILLIAMPS 500                     
-
-
 
 
 

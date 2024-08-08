@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <WiFi.h>
 #include "debug_conditionals.h"
 #include "displayFastLedCommon.h"
 #include <freertos/portmacro.h>
@@ -8,7 +7,6 @@
 /// NO NEED TO HOOK THIS UP
 /// Just run it on an isolated Esp32.
 
-#define VERSION_FASTLED_HANG_FIX_DEMO "1.1.2"
 
 #ifndef ESP32
 # error "This code requires an ESP32"
@@ -126,7 +124,6 @@ void setup(void)
 
 
 #define MINUTES_BETWEEN_REPORTS 1
-#define NUMBER_BUFFER 33
 
 void loop(void)
     {
@@ -146,36 +143,8 @@ void loop(void)
         {
         DEBUG_START_SEMAPHORE_BLOCK
             {
-            char buffer[NUMBER_BUFFER + 1];
-            uint32_t seconds_run_time = (esp_timer_get_time() / 1000000.0);
-            uint32_t tm_Hours = (seconds_run_time / 3600);
-            uint32_t tm_Minutes = (seconds_run_time / 60) % 60;
-            uint32_t tm_Seconds = seconds_run_time % 60;
-            DEBUG_PRINT("Running continuously for ");
-            if (tm_Hours > 0)
-                {
-                snprintf(buffer, NUMBER_BUFFER, "%u:", tm_Hours);
-                DEBUG_PRINT(buffer);
-                }
-            snprintf(buffer, NUMBER_BUFFER, "%02.2u:", tm_Minutes);
-            DEBUG_PRINT(buffer);
-            snprintf(buffer, NUMBER_BUFFER, "%02.2u", tm_Seconds);
-            DEBUG_PRINT(buffer);
-            if (tm_Hours > 0)
-                {
-                DEBUG_PRINT(" hour(s) ");
-                }
-            else
-                {
-                if (tm_Minutes > 0)
-                    {
-                    DEBUG_PRINT(" minutes(s) ");
-                    }
-                else
-                    {
-                    DEBUG_PRINT(" seconds(s) ");
-                    }
-                }
+            debugDisplaySeconds("Running continuously for ", 
+                                uint32_t (esp_timer_get_time() / 1000000.0));
             DEBUG_PRINT("after boot. Speed ");
             DEBUG_PRINT((float) (loopTime / (MINUTES_BETWEEN_REPORTS * 60.0)),2);
             DEBUG_PRINT(" loops per sec (int = ");

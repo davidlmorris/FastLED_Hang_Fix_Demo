@@ -1,4 +1,4 @@
-#include <Arduino.h>
+
 #include "debug_conditionals.h"
 
 
@@ -39,4 +39,39 @@ void giveSemaphore(void)
     vTaskDelay(xTickATinyBit); // Allow a little time for the serial port to do its print.
     xSemaphoreGive(xBinarySemaphoreSerialPort);
     }
+
+void debugDisplaySeconds(const char* sMessage, uint32_t seconds_run_time)
+    {
+    char buffer[NUMBER_BUFFER + 1];        
+
+    uint32_t tm_Hours = (seconds_run_time / 3600);
+    uint32_t tm_Minutes = (seconds_run_time / 60) % 60;
+    uint32_t tm_Seconds = seconds_run_time % 60;
+    DEBUG_PRINT(sMessage);
+    if (tm_Hours > 0)
+        {
+        snprintf(buffer, NUMBER_BUFFER, "%u:", tm_Hours);
+        DEBUG_PRINT(buffer);
+        }
+    snprintf(buffer, NUMBER_BUFFER, "%02.2u:", tm_Minutes);
+    DEBUG_PRINT(buffer);
+    snprintf(buffer, NUMBER_BUFFER, "%02.2u", tm_Seconds);
+    DEBUG_PRINT(buffer);
+    if (tm_Hours > 0)
+        {
+        DEBUG_PRINT(" hour(s) ");
+        }
+    else
+        {
+        if (tm_Minutes > 0)
+            {
+            DEBUG_PRINT(" minutes(s) ");
+            }
+        else
+            {
+            DEBUG_PRINT(" seconds(s) ");
+            }
+        }
+    }
+
 #endif
